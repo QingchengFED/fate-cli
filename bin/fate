@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+
+var program = require('commander')
+
+
+program
+	.usage('<command> [options]')
+	.version(require('../package').version)
+	.command('init', 'generate a new project from a template')
+	.parse(process.argv)
+
