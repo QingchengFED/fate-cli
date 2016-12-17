@@ -62,11 +62,11 @@ if (exists(to)) {
             ? 'Generate project in current directory?'
             : 'Target directory exists. Continue?',
         name: 'ok'
-    }], function (answers) {
-        if (answers.ok) {
-            run()
-        }
-    })
+    }]).then(function (answers) {
+         if (answers.ok) {
+             run()
+         }
+     })
 } else {
     run()
 }
