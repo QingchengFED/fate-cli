@@ -16,6 +16,7 @@ var generate = require('../lib/generate')
 var templateMapping = {
     'ea': 'QingchengFED/fate-template-EnumsElish',
     'ex': 'QingchengFED/fate-template-Excalibur',
+    'ava': 'QingchengFED/fate-template-Avalon',
 }
 
 
