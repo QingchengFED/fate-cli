@@ -14,10 +14,16 @@ var generate = require('../lib/generate')
 
 
 var templateMapping = {
-    'ea': 'QingchengFED/fate-template-EnumsElish',
-    'ex': 'QingchengFED/fate-template-Excalibur',
-    'ava': 'QingchengFED/fate-template-Avalon',
-}
+    'ea': {
+        'src': 'QingchengFED/fate-template-EnumsElish',
+        'description': '基础的gulp构建项目,包括一些基本的gulp依赖和task。'
+    },
+    'ex': {
+        'src': 'QingchengFED/fate-template-Excalibur',
+        'description': '用于发布cdn的项目'
+    }
+};
+
 
 
 /**
@@ -33,10 +39,22 @@ program.usage('<template-name> [project-name]')
 program.on('--help', function () {
     console.log('  Examples:')
     console.log()
-    console.log(chalk.green.bgRed(' # create a project with my template'))
-    console.log(' $ fate init <template-name> [project-name]')
+    console.log('  $ fate init <template-name> [project-name]')
     console.log()
-})
+    console.log('  Available Templates:');
+    console.log()
+    for(var key in templateMapping){
+        logTemplate(key, templateMapping[key].description)
+    }
+    console.log()
+});
+
+function logTemplate(shortName, description){
+  console.log(
+    '  ' + chalk.yellow('★') +
+    '  ' + chalk.blue(shortName) +
+    ' - ' + description)
+}
 
 
 function help() {
@@ -85,7 +103,7 @@ function run() {
     var spinner = ora('downloading template')
     spinner.start()
 
-    download(templateMapping[template], tmp, {clone: false}, function (err) {
+    download(templateMapping[template].src, tmp, {clone: false}, function (err) {
         spinner.stop()
 
         process.on('exit', function () {
