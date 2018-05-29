@@ -12,54 +12,50 @@ var uid = require('uid')
 var ora = require('ora')
 var generate = require('../lib/generate')
 
-
 var templateMapping = {
-    'ea': {
-        'src': 'QingchengFED/fate-template-EnumsElish',
-        'description': '基础的gulp构建项目,包括一些基本的gulp依赖和task。'
-    },
-    'ex': {
-        'src': 'QingchengFED/fate-template-Excalibur',
-        'description': '用于发布cdn的项目'
-    }
+  'ea': {
+    'src': 'QingchengFED/fate-template-EnumsElish',
+    'description': '基础的gulp构建项目,包括一些基本的gulp依赖和task。'
+  },
+  'ex': {
+    'src': 'QingchengFED/fate-template-Excalibur',
+    'description': '用于发布cdn的项目'
+  }
 };
-
 
 
 /**
  * Usage
  */
-program.usage('<template-name> [project-name]')
+program.usage('<template-name> [project-name]');
 
 
 /**
  *  Help
  */
-
 program.on('--help', function () {
-    console.log('  Examples:')
-    console.log()
-    console.log('  $ fate init <template-name> [project-name]')
-    console.log()
-    console.log('  Available Templates:');
-    console.log()
-    for(var key in templateMapping){
-        logTemplate(key, templateMapping[key].description)
-    }
-    console.log()
+  console.log('  Examples:');
+  console.log();
+  console.log('  $ fate init <template-name> [project-name]');
+  console.log();
+  console.log('  Available Templates:');
+  console.log();
+  for (var key in templateMapping) {
+    logTemplate(key, templateMapping[key].description)
+  }
+  console.log()
 });
 
-function logTemplate(shortName, description){
+function logTemplate(shortName, description) {
   console.log(
     '  ' + chalk.yellow('★') +
     '  ' + chalk.blue(shortName) +
     ' - ' + description)
 }
 
-
 function help() {
-    program.parse(process.argv)
-    if (program.args.length < 1) return program.help();
+  program.parse(process.argv)
+  if (program.args.length < 1) return program.help();
 }
 
 help();
@@ -67,7 +63,6 @@ help();
 /**
  * Settings
  */
-
 var template = program.args[0]
 var rawName = program.args[1]
 var inPlace = !rawName || rawName === '.'
@@ -75,19 +70,19 @@ var name = inPlace ? path.relative('../', process.cwd()) : rawName
 var to = path.resolve(rawName || '.')
 
 if (exists(to)) {
-    inquirer.prompt([{
-        type: 'confirm',
-        message: inPlace
-            ? 'Generate project in current directory?'
-            : 'Target directory exists. Continue?',
-        name: 'ok'
-    }]).then(function (answers) {
-         if (answers.ok) {
-             run()
-         }
-     })
+  inquirer.prompt([{
+    type: 'confirm',
+    message: inPlace
+      ? 'Generate project in current directory?'
+      : 'Target directory exists. Continue?',
+    name: 'ok'
+  }]).then(function (answers) {
+    if (answers.ok) {
+      run()
+    }
+  })
 } else {
-    run()
+  run()
 }
 
 /**
@@ -95,28 +90,28 @@ if (exists(to)) {
  */
 
 function run() {
-    var tmp = os.tmpdir() + 'fate-template-' + uid()
+  var tmp = os.tmpdir() + 'fate-template-' + uid()
 
-    if (!templateMapping[template])
-        return console.log(chalk.red('can not find template repo'))
+  if (!templateMapping[template])
+    return console.log(chalk.red('can not find template repo'))
 
-    var spinner = ora('downloading template')
-    spinner.start()
+  var spinner = ora('downloading template')
+  spinner.start()
 
-    download(templateMapping[template].src, tmp, {clone: false}, function (err) {
-        spinner.stop()
+  download(templateMapping[template].src, tmp, { clone: false }, function (err) {
+    spinner.stop()
 
-        process.on('exit', function () {
-            rm(tmp)
-        })
-
-        if (err) console.log(chalk.red('Failed to download repo'))
-
-        generate(name, tmp, to, function (err) {
-            console.log('get err', err);
-            if (err)  console.log(chalk.red(err))
-            console.log()
-            console.log(chalk.green('Generate success'))
-        })
+    process.on('exit', function () {
+      rm(tmp)
     })
+
+    if (err) console.log(chalk.red('Failed to download repo'))
+
+    generate(name, tmp, to, function (err) {
+      console.log('get err', err);
+      if (err) console.log(chalk.red(err))
+      console.log()
+      console.log(chalk.green('Generate success'))
+    })
+  })
 }

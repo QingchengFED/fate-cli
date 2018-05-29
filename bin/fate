@@ -2,10 +2,10 @@
 
 var program = require('commander')
 
-
 program
 	.usage('<command> [options]')
 	.version(require('../package').version)
-	.command('init', 'generate a new project from a template')
+	.command('init', '通过模板创建新项目')
+	.command('quick', '一些为了提高开发效率的快捷工具')
 	.parse(process.argv)
 
