@@ -4,9 +4,7 @@
   "description": "scaffold for qingcheng frontend project",
   "main": "index.js",
   "bin": {
-    "fate": "bin/fate",
-    "fate-init": "bin/fate-init",
-    "fate-ng": "bin/fate-ng"
+    "fate": "bin/fate"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

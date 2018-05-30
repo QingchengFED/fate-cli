@@ -1,11 +1,26 @@
 #!/usr/bin/env node
 
 const program = require('commander');
+const ng = require('../lib/ng');
 
 program
   .usage('<command> [options]')
-  .version(require('../package').version)
-  .command('init', '通过模板创建新项目')
-  .command('ng', '符合angular style guide规范的一些快捷方式')
-  .parse(process.argv);
+  .version(require('../package').version);
+
+program
+  .command('ng <template> <name>')
+  .description('符合angular style guide规范的一些快捷方式')
+  .on('--help', ng.help)
+  .action(() => {
+    ng.quick(template, name);
+  });
+
+program
+  .command('init')
+  .description('通过模板创建新项目')
+  .action(() => {
+    console.log('trigger init');
+  });
+
+program.parse(process.argv);
 

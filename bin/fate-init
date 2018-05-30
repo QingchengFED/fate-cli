@@ -1,60 +1,58 @@
 #!/usr/bin/env node
 
-var program = require('commander')
-var chalk = require('chalk')
-var path = require('path')
-var exists = require('fs').existsSync
-var inquirer = require('inquirer')
-var download = require('download-git-repo')
-var os = require('os')
-var rm = require('rimraf').sync
-var uid = require('uid')
-var ora = require('ora')
-var generate = require('../lib/generate')
+const program = require('commander');
+const chalk = require('chalk');
+const path = require('path');
+const exists = require('fs').existsSync;
+const inquirer = require('inquirer');
+const download = require('download-git-repo');
+const os = require('os');
+const rm = require('rimraf').sync;
+const uid = require('uid');
+const ora = require('ora');
+const generate = require('../lib/generate');
 
-var templateMapping = {
-  'ea': {
-    'src': 'QingchengFED/fate-template-EnumsElish',
-    'description': '基础的gulp构建项目,包括一些基本的gulp依赖和task。'
+const templateMapping = {
+  ea: {
+    src: 'QingchengFED/fate-template-EnumsElish',
+    description: '基础的gulp构建项目,包括一些基本的gulp依赖和task。',
   },
-  'ex': {
-    'src': 'QingchengFED/fate-template-Excalibur',
-    'description': '用于发布cdn的项目'
-  }
+  ex: {
+    src: 'QingchengFED/fate-template-Excalibur',
+    description: '用于发布cdn的项目',
+  },
 };
-
 
 /**
  * Usage
  */
 program.usage('<template-name> [project-name]');
 
-
 /**
  *  Help
  */
-program.on('--help', function () {
+program.on('--help', () => {
   console.log('  Examples:');
   console.log();
   console.log('  $ fate init <template-name> [project-name]');
   console.log();
   console.log('  Available Templates:');
   console.log();
-  for (var key in templateMapping) {
-    logTemplate(key, templateMapping[key].description)
+  for (const key in templateMapping) {
+    logTemplate(key, templateMapping[key].description);
   }
-  console.log()
+  console.log();
 });
 
 function logTemplate(shortName, description) {
-  console.log(
-    '  ' + chalk.yellow('★') +
-    '  ' + chalk.blue(shortName) +
-    ' - ' + description)
+  console.log(`  ${chalk.yellow('★')
+  }  ${chalk.blue(shortName)
+  } - ${description}`);
 }
 
 function help() {
-  program.parse(process.argv)
+  program.parse(process.argv);
+  console.log('xxx is', program.args.length);
   if (program.args.length < 1) return program.help();
 }
 
@@ -63,11 +61,11 @@ help();
 /**
  * Settings
  */
-var template = program.args[0]
-var rawName = program.args[1]
-var inPlace = !rawName || rawName === '.'
-var name = inPlace ? path.relative('../', process.cwd()) : rawName
-var to = path.resolve(rawName || '.')
+const template = program.args[0];
+const rawName = program.args[1];
+const inPlace = !rawName || rawName === '.';
+const name = inPlace ? path.relative('../', process.cwd()) : rawName;
+const to = path.resolve(rawName || '.');
 
 if (exists(to)) {
   inquirer.prompt([{
@@ -75,14 +73,14 @@ if (exists(to)) {
     message: inPlace
       ? 'Generate project in current directory?'
       : 'Target directory exists. Continue?',
-    name: 'ok'
-  }]).then(function (answers) {
+    name: 'ok',
+  }]).then((answers) => {
     if (answers.ok) {
-      run()
+      run();
     }
-  })
+  });
 } else {
-  run()
+  run();
 }
 
 /**
@@ -90,28 +88,27 @@ if (exists(to)) {
  */
 
 function run() {
-  var tmp = os.tmpdir() + 'fate-template-' + uid()
+  const tmp = `${os.tmpdir()}fate-template-${uid()}`;
 
-  if (!templateMapping[template])
-    return console.log(chalk.red('can not find template repo'))
+  if (!templateMapping[template]) { return console.log(chalk.red('can not find template repo')); }
 
-  var spinner = ora('downloading template')
-  spinner.start()
+  const spinner = ora('downloading template');
+  spinner.start();
 
-  download(templateMapping[template].src, tmp, { clone: false }, function (err) {
-    spinner.stop()
+  download(templateMapping[template].src, tmp, { clone: false }, (err) => {
+    spinner.stop();
 
-    process.on('exit', function () {
-      rm(tmp)
-    })
+    process.on('exit', () => {
+      rm(tmp);
+    });
 
-    if (err) console.log(chalk.red('Failed to download repo'))
+    if (err) console.log(chalk.red('Failed to download repo'));
 
-    generate(name, tmp, to, function (err) {
+    generate(name, tmp, to, (err) => {
       console.log('get err', err);
-      if (err) console.log(chalk.red(err))
-      console.log()
-      console.log(chalk.green('Generate success'))
-    })
-  })
+      if (err) console.log(chalk.red(err));
+      console.log();
+      console.log(chalk.green('Generate success'));
+    });
+  });
 }
