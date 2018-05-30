@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-var program = require('commander')
+const program = require('commander');
 
 program
-	.usage('<command> [options]')
-	.version(require('../package').version)
-	.command('init', '通过模板创建新项目')
-	.command('quick', '一些为了提高开发效率的快捷工具')
-	.parse(process.argv)
+  .usage('<command> [options]')
+  .version(require('../package').version)
+  .command('init', '通过模板创建新项目')
+  .command('ng', '符合angular style guide规范的一些快捷方式')
+  .parse(process.argv);
 

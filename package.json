@@ -5,7 +5,8 @@
   "main": "index.js",
   "bin": {
     "fate": "bin/fate",
-    "fate-init": "bin/fate-init"
+    "fate-init": "bin/fate-init",
+    "fate-ng": "bin/fate-ng"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
