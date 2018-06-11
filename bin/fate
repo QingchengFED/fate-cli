@@ -11,7 +11,7 @@ program
   .command('ng <template> <name>')
   .description('符合angular style guide规范的一些快捷方式')
   .on('--help', ng.help)
-  .action(() => {
+  .action((template, name) => {
     ng.quick(template, name);
   });
 
